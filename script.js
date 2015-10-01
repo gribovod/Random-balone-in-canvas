@@ -19,9 +19,7 @@ window.onload = function() {
     context.canvas.width = canvasWidth;
     context.canvas.height = canvasHeight;
 
-    var cori = RCFNC();
-    ArayOfCircles[1] = (new Circle(cori.X,  cori.Y , RadiusOfCircle));
-    DrawAllCircle();
+    Draw();
 
 
     canvas.onclick = function(e) { // обрабатываем клики мышью
@@ -33,8 +31,11 @@ window.onload = function() {
 
 function event (x, y){
     console.log(x+"  "+y);
-    ArayOfCircles[1].CheckPoint(x,y);
-
+    var a = ArayOfCircles[1].CheckPoint(x,y);
+    if(a == true){
+        ArayOfCircles[1].Clear();
+    }
+    Draw();
 }
 
 function Circle(x,y,r){
@@ -51,14 +52,18 @@ function Circle(x,y,r){
         context.strokeStyle = 'red';
         context.stroke();
     };
-
+    this.Clear  = function (){
+        context.beginPath();
+        context.arc(X, Y, R+1, 0, 2*Math.PI, false);
+        context.fillStyle = 'bisque';
+        context.fill();
+        context.lineWidth = 1;
+        context.strokeStyle = 'bisque';
+        context.stroke();
+    };
     this.CheckPoint = function(XofPoint, YofPoint){
         var h = Math.sqrt(Math.pow((X-XofPoint),2) + Math.pow((Y-YofPoint),2));
-
-        var a = Math.pow((X-XofPoint),2);
-        var b = Math.pow((Y-YofPoint),2);
-
-        if (R <= h) {
+        if (R >= h) {
             console.log( 'Дa!' );
             return true;
         } else {
@@ -87,4 +92,9 @@ function DrawAllCircle(){
             item.Draw();
         }
     );
+}
+function Draw(){
+    var cori = RCFNC();
+    ArayOfCircles[1] = (new Circle(cori.X,  cori.Y , RadiusOfCircle));
+    DrawAllCircle();
 }
