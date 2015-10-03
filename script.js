@@ -1,10 +1,3 @@
-/**
- * Created by Vadim on 29.09.2015.
- */
-function click(){
-    alert("cfnvas");
-}
-
 var canvas;
 var canvasHeight = 600;
 var canvasWidth = 800;
@@ -12,30 +5,30 @@ var context;
 var RadiusOfCircle = 10;
 var ArayOfCircles = new Array();
 
+function Start(){
+    setInterval(function(){AddCircle();}, 1000);
+}
 
 window.onload = function() {
     canvas = document.getElementById("canvas");
     context = canvas.getContext("2d");
     context.canvas.width = canvasWidth;
     context.canvas.height = canvasHeight;
-
-    Draw();
-
-
     canvas.onclick = function(e) { // обрабатываем клики мышью
         var x = (e.pageX - canvas.offsetLeft);
         var y = (e.pageY - canvas.offsetTop);
         event(x, y); // выхов функции действия
     };
 }
-
 function event (x, y){
     console.log(x+"  "+y);
-    var a = ArayOfCircles[1].CheckPoint(x,y);
-    if(a == true){
-        ArayOfCircles[1].Clear();
-    }
-    Draw();
+    ArayOfCircles.forEach(function(item, i, ArayOfCircles){
+            if(item.CheckPoint(x,y) == true){
+                item.Clear();
+                delete ArayOfCircles[i];
+            }
+        }
+    );
 }
 
 function Circle(x,y,r){
@@ -93,8 +86,8 @@ function DrawAllCircle(){
         }
     );
 }
-function Draw(){
+function AddCircle(){
     var cori = RCFNC();
-    ArayOfCircles[1] = (new Circle(cori.X,  cori.Y , RadiusOfCircle));
+    ArayOfCircles.push((new Circle(cori.X,  cori.Y , RadiusOfCircle)));
     DrawAllCircle();
 }
